@@ -80,6 +80,14 @@ describe('The lotto picker', function() {
         expect(ex.message).to.equal('Input contains too many numbers to make a valid lotto pick (7)');
       });
     });
+
+    it('should not return a seven-number pick for an input with duplicate numbers', function() {
+      let inputString = '569815571556';
+
+      expect(lottoPicker.makePick).withArgs(inputString).to.throwException(function(ex) {
+        expect(ex.message).to.equal('Input contains duplicate lotto numbers: 15');
+      });
+    });
   });
 
   describe('when making a sequence of picks', function() {

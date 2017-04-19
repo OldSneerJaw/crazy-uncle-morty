@@ -20,9 +20,13 @@ exports.makePick = function(inputString) {
   let stagedChar = '';
 
   function addToPick(currentChar) {
-    // Because it's a Set, duplicates are automatically discarded
-    pickNumbers.add(Number(stagedChar + currentChar));
-    stagedChar = '';
+    let numberToAdd = Number(stagedChar + currentChar);
+    if (pickNumbers.has(numberToAdd)) {
+      throw new Error('Input contains duplicate lotto numbers: ' + numberToAdd);
+    } else {
+      pickNumbers.add(numberToAdd);
+      stagedChar = '';
+    }
   }
 
   for (let i = 0; i < inputString.length; i++) {
