@@ -1,0 +1,8 @@
+{
+  "name": "crazy-uncle-morty",
+  "version": "0.1.0",
+  "devDependencies": {
+    "expect.js": "^0.3.1",
+    "mocha": "^3.2.0"
+  }
+}
