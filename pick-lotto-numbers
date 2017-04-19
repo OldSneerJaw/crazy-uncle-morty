@@ -1,0 +1,38 @@
+#!/usr/bin/env node
+
+const path = require('path');
+const lottoPicker = require('./src/lotto-picker.js');
+
+const errorStatus = 1;
+
+function showUsage() {
+  let nodeBinary = path.basename(process.argv[0]);
+  let scriptName = path.basename(process.argv[1]);
+
+  console.log('A utility for picking Uncle Morty\'s lotto numbers.\n');
+
+  console.log('Usage:  ' + scriptName + ' <input>...');
+  console.log('   or:  ' + nodeBinary + ' ' + scriptName + ' <input>...\n');
+
+  console.log('Arguments:');
+  console.log('    input');
+  console.log('        An array of input strings, where each consists of seven or more digits from 1 through 9\n');
+
+  console.log('For example:  ' + scriptName + ' 1234567 4938532894754\n');
+
+  console.log('See the README for more information.');
+}
+
+// Verify the correct number of commandline params
+if (process.argv.length <= 2) {
+  showUsage();
+
+  process.exit(errorStatus);
+}
+
+let inputStrings = process.argv.slice(2);
+let result = lottoPicker.makePicks(inputStrings);
+
+for (let key in result) {
+  console.log(key + ' -> ' + result[key].join(' '));
+}

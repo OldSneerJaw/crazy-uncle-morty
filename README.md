@@ -4,7 +4,8 @@ Usage:
 
 1. Install test dependencies using npm: `npm install`
 2. Execute the tests using the mocha test runner: `node_modules/mocha/bin/mocha`
-3. Use JSHint to identify lint in the code: `jshint .`
+3. Extract the lotto pick from an array of strings: `./pick-lotto-numbers ${inputString1} ${inputString2} ...`
+4. Use JSHint to identify lint in the code: `jshint .`
 
 For reference, here is the original problem description:
 
