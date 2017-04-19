@@ -50,3 +50,28 @@ exports.makePick = function(inputString) {
   // automatically expands the Set of numbers to an array
   return [...pickNumbers];
 };
+
+/**
+ * Determines the sequences of lotto numbers to pick from the given array of strings.
+ *
+ * @param {string[]} inputStrings An array of input strings, where each consists of seven or more digits from 1 through 9
+ *
+ * @return {Object} An object/hash that maps each valid input string to an array of numbers that are included in that pick. If an input
+ *                  string is invalid, it will be excluded from this result.
+ */
+exports.makePicks = function(inputStrings) {
+  let result = { };
+
+  for (let i = 0; i < inputStrings.length; i++) {
+    let inputString = inputStrings[i];
+    try {
+      let pick = exports.makePick(inputString);
+
+      result[inputString] = pick;
+    } catch (ex) {
+      console.log('Invalid input string ("' + inputString + '"): ' + ex.message);
+    }
+  }
+
+  return result;
+};
