@@ -16,7 +16,7 @@ function showUsage() {
 
   console.log('Arguments:');
   console.log('    input');
-  console.log('        An array of input strings, where each consists of seven or more digits from 1 through 9\n');
+  console.log('        An array of input strings, where each consists of seven or more digits\n');
 
   console.log('For example:  ' + scriptName + ' 1234567 4938532894754\n');
 
