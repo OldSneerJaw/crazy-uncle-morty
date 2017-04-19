@@ -11,10 +11,10 @@ const maximumTensDigit = '5';
  */
 exports.makePick = function(inputString) {
   if (!inputRegex.test(inputString)) {
-    throw new Error('inputString must be a sequence of digits');
+    throw new Error('Input must be a sequence of digits');
   }
   if (inputString.length < expectedCount) {
-    throw new Error('inputString must contain at least ' + expectedCount + ' digits');
+    throw new Error('Input must contain at least ' + expectedCount + ' digits');
   }
 
   // In JavaScript the Set type is iterated in insertion order so that the order will always be predictable, like in an array; however, it
@@ -48,6 +48,10 @@ exports.makePick = function(inputString) {
       // The character is to be the first digit of a new two-digit number
       stagedChar = currentChar;
     }
+  }
+
+  if (pickNumbers.size < expectedCount) {
+    throw new Error('Input does not contain enough numbers to make a valid lotto pick (' + expectedCount + ')');
   }
 
   // This use of the spread operator (https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_operator)

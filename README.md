@@ -7,6 +7,8 @@ Usage:
 3. Extract the lotto pick from an array of strings: `./pick-lotto-numbers ${inputString1} ${inputString2} ...`
 4. Use JSHint to identify lint in the code: `jshint .`
 
+NOTE: There are edge cases in which the current implementation fails to parse a valid lotto pick even though there is a valid solution. For example, consider an input string of "76543210": a valid pick would be 7 6 5 4 3 2 10. However, the current implementation produces 7 6 54 3 2 1, and then it would throw an exception because the only digit remaining is a zero and zero is not a valid lotto number. Another example: "12304567" should produce 1 2 30 4 5 6 7, but this implementation would produce 12 3 4 5 6 7 and then throw an exception because there are not enough digits remaining to make a full pick.
+
 For reference, here is the original problem description:
 
 > Winning Ticket!
