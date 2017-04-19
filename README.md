@@ -1,15 +1,15 @@
-This repo contains a solution for the "Winning Ticket" problem. It is implemented using JavaScript (ECMAScript 6/2015) and Node.js.
+This repo contains a solution for the "Winning Ticket" problem. It was implemented by Joel Andrews using JavaScript (ECMAScript 6/2015) and Node.js.
 
 Usage:
 
 1. Install test dependencies using npm: `npm install`
 2. Execute the tests using the mocha test runner: `node_modules/mocha/bin/mocha`
 3. Extract the lotto pick from an array of strings: `./pick-lotto-numbers ${inputString1} ${inputString2} ...`
-4. Use JSHint to identify lint in the code: `jshint .`
+4. (optional) Use JSHint to identify lint in the code: `jshint .`
 
-NOTE #1: There are edge cases in which the current implementation fails to parse a valid lotto pick even though there is a valid solution. For example, consider an input string of "76543210": a valid pick would be 7 6 5 4 3 2 10. However, the current implementation produces 7 6 54 3 2 1, and then it would throw an exception because the only digit remaining is a zero and zero is not a valid lotto number. Another example: "12304567" should produce 1 2 30 4 5 6 7, but this implementation would produce 12 3 4 5 6 7 and then throw an exception because there are not enough digits remaining to make a full pick.
+NOTE #1: There are edge cases in which the current implementation fails to parse a valid lotto pick with zeros in it even though there is a valid solution. For example, consider an input string of "76543210": a valid pick would be 7 6 5 4 3 2 10. However, the current implementation produces 7 6 54 3 2 1, and then it would throw an exception because the only digit remaining is a zero and zero is not a valid lotto number. Another example: "12304567" could be interpreted as 1 2 30 4 5 6 7, but this implementation would produce 12 3 4 5 6 7, skip the zero and then throw an exception because there are not enough digits remaining to make a full pick.
 
-NOTE #2: Because there is some ambiguity with regards to the uniqueness requirement in the problem description and in the follow-up response, I have chosen to interpret it to mean that an input string should be rejected if a duplicate lotto number is encountered. For example, the input "569815571556", if parsed to simply skip duplicate values, would produce 56 9 8 15 57 5 6 (notice the second "15" has been skipped). But, as mentioned, the current implementation simply rejects the input string altogether.
+NOTE #2: In certain rare edge cases, a string will be rejected if the parser encounters duplicate values that cannot be resolved without overly complex backtracking. For example, consider the input string "1634616512": it would be parsed into 16 34 6, then because "16" has already been stored, it would store the "1" and then find that it can't store the "6" because that is a duplicate too. And, because the maximum lotto number value is 59, the "6" can't be the start of a new two-digit lotto number. It is intentionally rejected by this implementation, even though, with considerably more complex logic, it could conceivably be parsed as 1 6 34 6 16 51 2.
 
 For reference, here is the original problem description:
 

@@ -27,6 +27,17 @@ describe('The lotto picker', function() {
       expect(result).to.eql([ 9, 20, 40, 4, 3, 2, 1 ]);
     });
 
+    it('should return a seven-number pick when duplicate values cause it to adjust to a different split', function() {
+      // Note that it will parse out "51", "9", "8", "15", then when it gets to the second "51", it will split it into "5" and "1" and store
+      // the "5". Then it will carry forward the "1" making the next candidate lotto number "15", which is another duplicate, so it will
+      // store the "1" and carry the "5" forward to make "56" the final lotto number of the pick.
+      let inputString = '5198155156';
+
+      let result = lottoPicker.makePick(inputString);
+
+      expect(result).to.eql([ 51, 9, 8, 15, 5, 1, 56 ]);
+    });
+
     it('should return a pick where a zero is the first digit', function() {
       let inputString = '04903805302809047054';
 
@@ -73,7 +84,8 @@ describe('The lotto picker', function() {
       });
     });
 
-    it('should not return a seven-number pick for an input with extra digits', function() {
+    it('should not return a pick for an input with extra digits', function() {
+      // Note that it parses this string as 47 28 44 27 8 46 54 45, which is one too many lotto numbers for a pick
       let inputString = '472844278465445';
 
       expect(lottoPicker.makePick).withArgs(inputString).to.throwException(function(ex) {
@@ -81,11 +93,25 @@ describe('The lotto picker', function() {
       });
     });
 
-    it('should not return a seven-number pick for an input with duplicate numbers', function() {
+    it('should not return a pick for an input where a duplicate number causes it to extend beyond the maximum of 7 numbers', function() {
+      // Note that it will parse out "56", "9", "8", "15", "57", then when it gets to the second "15", it will split it into "1" and "5" and
+      // store the "1". Then it will carry forward the "5" making the next lotto number "55", followed by "6". This produces a pick with
+      // eight lotto numbers, which is invalid.
       let inputString = '569815571556';
 
       expect(lottoPicker.makePick).withArgs(inputString).to.throwException(function(ex) {
-        expect(ex.message).to.equal('Input contains duplicate lotto numbers: 15');
+        expect(ex.message).to.equal('Input contains too many numbers to make a valid lotto pick (7)');
+      });
+    });
+
+    it('should not return a pick when a duplicate value cannot be resolved', function() {
+      // Note that it will parse out "16", "34", "6", then when it gets to the second "16", it will split it into "1" and "6" and store the
+      // "1". Then, because the maximum lotto number value is 59, it will be unable to continue because the remaining "6" cannot be the
+      // start of a new two-digit number and there is already a "6" in the pick. Therefore, it will be rejected.
+      let inputString = '1634616512';
+
+      expect(lottoPicker.makePick).withArgs(inputString).to.throwException(function(ex) {
+        expect(ex.message).to.equal('Input contains duplicate lotto numbers: 6');
       });
     });
   });
@@ -97,10 +123,12 @@ describe('The lotto picker', function() {
         '7654321',
         '07060504030201',
         '193854321',
-        '569815571556',    // rejected because it has duplicate lotto numbers (15)
+        '5198155156',
+        '569815571556',    // rejected because it has a duplicate lotto number (15) that causes it to exhaust subsequent digits
         '472844278465445', // rejected because it has too many (8) lotto numbers
         'z1234567',        // rejected because it contains non-digit characters
-        '987654'           // rejected because it does not contain enough characters to make a pick
+        '987654',          // rejected because it does not contain enough characters to make a pick
+        '1634616512'       // rejected because it would produce duplicate lotto numbers
       ];
 
       let result = lottoPicker.makePicks(inputStrings);
@@ -109,7 +137,8 @@ describe('The lotto picker', function() {
         '4938532894754': [ 49, 38, 53, 28, 9, 47, 54 ],
         '7654321': [ 7, 6, 5, 4, 3, 2, 1 ],
         '07060504030201': [ 7, 6, 50, 40, 30, 20, 1 ],
-        '193854321': [ 19, 38, 5, 4, 3, 2, 1 ]
+        '193854321': [ 19, 38, 5, 4, 3, 2, 1 ],
+        '5198155156': [ 51, 9, 8, 15, 5, 1, 56 ]
       });
     });
   });

@@ -26,13 +26,40 @@ exports.makePick = function(inputString) {
   let pickNumbers = new Set();
   let stagedChar = '';
 
-  function addToPick(currentChar) {
-    let numberToAdd = Number(stagedChar + currentChar);
+  function addOneDigitNumberToPick(currentChar) {
+    let numberToAdd = Number(currentChar);
     if (pickNumbers.has(numberToAdd)) {
       throw new Error('Input contains duplicate lotto numbers: ' + numberToAdd);
     } else {
       pickNumbers.add(numberToAdd);
       stagedChar = '';
+    }
+  }
+
+  function addTwoDigitNumberToPick(currentChar) {
+    let combinedNumber = Number(stagedChar + currentChar);
+    if (pickNumbers.has(combinedNumber)) {
+      // The two digits combined would produce a duplicate lotto number, so add the old staged character as a single-digit number and start
+      // a new one- or two-digit lotto number with the current character
+      addOneDigitNumberToPick(stagedChar);
+      if (currentChar > maximumTensDigit) {
+        // Because the maximum value is 59, if the first digit is 6, then it cannot be the start of a two digit number. Add it as a one-digit
+        // number to the pick.
+        addOneDigitNumberToPick(currentChar);
+      } else {
+        stagedChar = currentChar;
+      }
+    } else {
+      pickNumbers.add(combinedNumber);
+      stagedChar = '';
+    }
+  }
+
+  function addToPick(currentChar) {
+    if (stagedChar) {
+      addTwoDigitNumberToPick(currentChar);
+    } else {
+      addOneDigitNumberToPick(currentChar);
     }
   }
 
@@ -87,7 +114,7 @@ exports.makePicks = function(inputStrings) {
     try {
       result[inputString] = exports.makePick(inputString);
     } catch (ex) {
-      console.log('Invalid input string ("' + inputString + '"): ' + ex.message);
+      console.log('Rejected input string "' + inputString + '": ' + ex.message);
     }
   }
 
