@@ -28,12 +28,12 @@ exports.makePick = function(inputString) {
 
   function addOneDigitNumberToPick(currentChar) {
     let numberToAdd = Number(currentChar);
-    if (pickNumbers.has(numberToAdd)) {
-      throw new Error('Input contains duplicate lotto numbers: ' + numberToAdd);
-    } else {
+    // Only add the current digit if it does not already exist in the pick
+    if (!pickNumbers.has(numberToAdd)) {
       pickNumbers.add(numberToAdd);
-      stagedChar = '';
     }
+
+    stagedChar = '';
   }
 
   function addTwoDigitNumberToPick(currentChar) {

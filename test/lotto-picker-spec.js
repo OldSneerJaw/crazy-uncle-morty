@@ -46,6 +46,18 @@ describe('The lotto picker', function() {
       expect(result).to.eql([ 49, 38, 53, 28, 9, 47, 54 ]);
     });
 
+    it('should return a seven-number pick when a duplicate one-digit number is skipped over', function() {
+      // Note that it will parse out "16", "34", "6", then when it gets to the second "16", it will split it into "1" and "6" and store the
+      // "1". Then, because the maximum lotto number value is 59, the remaining "6" cannot be the start of a new two-digit number and,
+      // because there is already a "6" in the lotto pick, the "6" will simply be skipped. It will then parse out "5", "8", "2" as the
+      // remaining values in the pick.
+      let inputString = '1634616582';
+
+      let result = lottoPicker.makePick(inputString);
+
+      expect(result).to.eql([ 16, 34, 6, 1, 5, 8, 2 ]);
+    });
+
     it('should not return a pick if the input contains any non-digit characters', function() {
       let inputString = '1234567a';
 
@@ -106,12 +118,14 @@ describe('The lotto picker', function() {
 
     it('should not return a pick when a duplicate value cannot be resolved', function() {
       // Note that it will parse out "16", "34", "6", then when it gets to the second "16", it will split it into "1" and "6" and store the
-      // "1". Then, because the maximum lotto number value is 59, it will be unable to continue because the remaining "6" cannot be the
-      // start of a new two-digit number and there is already a "6" in the pick. Therefore, it will be rejected.
+      // "1". Then, because the maximum lotto number value is 59, the remaining "6" cannot be the start of a new two-digit number and,
+      // because there is already a "6" in the lotto pick, the "6" will simply be skipped. It will parse out "5", then when it gets to the
+      // second "1", it will skip it and, finally, parse the "2" as the last number. Because that is only six lotto numbers, the pick is
+      // rejected.
       let inputString = '1634616512';
 
       expect(lottoPicker.makePick).withArgs(inputString).to.throwException(function(ex) {
-        expect(ex.message).to.equal('Input contains duplicate lotto numbers: 6');
+        expect(ex.message).to.equal('Input does not contain enough numbers to make a valid lotto pick (7)');
       });
     });
   });
