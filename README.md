@@ -1,4 +1,10 @@
-This repo contains a solution for the "Winning Ticket" problem. It is implemented using JavaScript and Node.js.
+This repo contains a solution for the "Winning Ticket" problem. It is implemented using JavaScript (ECMAScript 6/2015) and Node.js.
+
+Usage:
+
+1. Install test dependencies using npm: `npm install`
+2. Execute the tests using the mocha test runner: `node_modules/mocha/bin/mocha`
+3. Use JSHint to identify lint in the code: `jshint .`
 
 For reference, here is the original problem description:
 
