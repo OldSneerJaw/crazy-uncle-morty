@@ -8,10 +8,17 @@ const maximumTensDigit = '5';
  * @param {string} inputString The number string. Must consist of at least seven digits.
  *
  * @return {integer[]} A sequence of seven numbers between 1 and 59 that comprise the lotto pick
+ *
+ * @throws An exception under the following conditions:
+ *         - The input does not contain at least seven characters
+ *         - The input contains any character that is not a digit (0-9)
+ *         - The input contains a duplicate lotto number
+ *         - The input does not contain enough lotto numbers to make a pick (7)
+ *         - The input contains too many numbers to make a pick (7)
  */
 exports.makePick = function(inputString) {
   if (inputString.length < expectedCount) {
-    throw new Error('Input must contain at least ' + expectedCount + ' digits');
+    throw new Error('Input must contain at least ' + expectedCount + ' characters');
   }
 
   // In JavaScript the Set type is iterated in insertion order so that the order will always be predictable, like in an array; however, it
@@ -32,7 +39,7 @@ exports.makePick = function(inputString) {
   for (let i = 0; i < inputString.length; i++) {
     let currentChar = inputString[i];
     if (!allowedChars.has(currentChar)) {
-      throw new Error('Input must be a sequence of digits');
+      throw new Error('Input must be a sequence of digits only');
     } else if (stagedChar) {
       // We now have enough digits to make a two-digit number to add to the pick
       addToPick(currentChar);

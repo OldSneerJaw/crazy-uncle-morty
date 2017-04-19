@@ -39,7 +39,7 @@ describe('The lotto picker', function() {
       let inputString = '1234567a';
 
       expect(lottoPicker.makePick).withArgs(inputString).to.throwException(function(ex) {
-        expect(ex.message).to.equal('Input must be a sequence of digits');
+        expect(ex.message).to.equal('Input must be a sequence of digits only');
       });
     });
 
@@ -47,7 +47,7 @@ describe('The lotto picker', function() {
       let inputString = '123456';
 
       expect(lottoPicker.makePick).withArgs(inputString).to.throwException(function(ex) {
-        expect(ex.message).to.equal('Input must contain at least 7 digits');
+        expect(ex.message).to.equal('Input must contain at least 7 characters');
       });
     });
 
@@ -92,7 +92,16 @@ describe('The lotto picker', function() {
 
   describe('when making a sequence of picks', function() {
     it('should return only those sequences that come from valid input strings', function() {
-      let inputStrings = [ '4938532894754', '7654321', '07060504030201', '193854321', '472844278465445', 'z1234567', '987654' ];
+      let inputStrings = [
+        '4938532894754',
+        '7654321',
+        '07060504030201',
+        '193854321',
+        '569815571556',    // rejected because it has duplicate lotto numbers (15)
+        '472844278465445', // rejected because it has too many (8) lotto numbers
+        'z1234567',        // rejected because it contains non-digit characters
+        '987654'           // rejected because it does not contain enough characters to make a pick
+      ];
 
       let result = lottoPicker.makePicks(inputStrings);
 
