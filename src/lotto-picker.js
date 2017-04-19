@@ -1,4 +1,4 @@
-const inputRegex = /^\d+$/;
+const allowedChars = new Set([ '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' ]);
 const expectedCount = 7;
 const maximumTensDigit = '5';
 
@@ -10,9 +10,6 @@ const maximumTensDigit = '5';
  * @return {integer[]} A sequence of seven numbers between 1 and 59 that comprise the lotto pick
  */
 exports.makePick = function(inputString) {
-  if (!inputRegex.test(inputString)) {
-    throw new Error('Input must be a sequence of digits');
-  }
   if (inputString.length < expectedCount) {
     throw new Error('Input must contain at least ' + expectedCount + ' digits');
   }
@@ -28,9 +25,11 @@ exports.makePick = function(inputString) {
     stagedChar = '';
   }
 
-  for (let i = 0; i < inputString.length && pickNumbers.size < expectedCount; i++) {
+  for (let i = 0; i < inputString.length; i++) {
     let currentChar = inputString[i];
-    if (stagedChar) {
+    if (!allowedChars.has(currentChar)) {
+      throw new Error('Input must be a sequence of digits');
+    } else if (stagedChar) {
       // We now have enough digits to make a two-digit number to add to the pick
       addToPick(currentChar);
     } else if (currentChar === '0') {
@@ -52,6 +51,8 @@ exports.makePick = function(inputString) {
 
   if (pickNumbers.size < expectedCount) {
     throw new Error('Input does not contain enough numbers to make a valid lotto pick (' + expectedCount + ')');
+  } else if (pickNumbers.size > expectedCount) {
+    throw new Error('Input contains too many numbers to make a valid lotto pick (' + expectedCount + ')');
   }
 
   // This use of the spread operator (https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_operator)

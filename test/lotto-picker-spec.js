@@ -27,14 +27,6 @@ describe('The lotto picker', function() {
       expect(result).to.eql([ 9, 20, 40, 4, 3, 2, 1 ]);
     });
 
-    it('should return a seven-number pick for an input with extra digits', function() {
-      let inputString = '472844278465445';
-
-      let result = lottoPicker.makePick(inputString);
-
-      expect(result).to.eql([ 47, 28, 44, 27, 8, 46, 54 ]);
-    });
-
     it('should return a pick where a zero is the first digit', function() {
       let inputString = '04903805302809047054';
 
@@ -80,11 +72,19 @@ describe('The lotto picker', function() {
         expect(ex.message).to.equal('Input does not contain enough numbers to make a valid lotto pick (7)');
       });
     });
+
+    it('should not return a seven-number pick for an input with extra digits', function() {
+      let inputString = '472844278465445';
+
+      expect(lottoPicker.makePick).withArgs(inputString).to.throwException(function(ex) {
+        expect(ex.message).to.equal('Input contains too many numbers to make a valid lotto pick (7)');
+      });
+    });
   });
 
   describe('when making a sequence of picks', function() {
     it('should return only those sequences that come from valid input strings', function() {
-      let inputStrings = [ '4938532894754', '7654321', '07060504030201', '193854321', '472844278465445', 'a1234567', '987654' ];
+      let inputStrings = [ '4938532894754', '7654321', '07060504030201', '193854321', '472844278465445', 'z1234567', '987654' ];
 
       let result = lottoPicker.makePicks(inputStrings);
 
@@ -92,8 +92,7 @@ describe('The lotto picker', function() {
         '4938532894754': [ 49, 38, 53, 28, 9, 47, 54 ],
         '7654321': [ 7, 6, 5, 4, 3, 2, 1 ],
         '07060504030201': [ 7, 6, 50, 40, 30, 20, 1 ],
-        '193854321': [ 19, 38, 5, 4, 3, 2, 1 ],
-        '472844278465445': [ 47, 28, 44, 27, 8, 46, 54 ]
+        '193854321': [ 19, 38, 5, 4, 3, 2, 1 ]
       });
     });
   });
