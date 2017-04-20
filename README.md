@@ -3,9 +3,9 @@ This repo contains a solution for the "Winning Ticket" problem. It was implement
 Usage:
 
 1. Install test dependencies using npm: `npm install`
-2. Execute the tests using the mocha test runner: `node_modules/mocha/bin/mocha`
-3. Extract the lotto pick from an array of strings: `./pick-lotto-numbers ${inputString1} ${inputString2} ...`
-4. (optional) Use JSHint to identify lint in the code: `jshint .`
+2. Execute the tests using the mocha test runner: `npm test`
+3. Extract lotto picks from an array of strings: `./pick-lotto-numbers ${inputString1} ${inputString2} ...`
+4. (optional) Use JSHint to identify lint in the code: `npm run-script jshint`
 
 NOTE #1: There are edge cases in which the current implementation fails to parse a valid lotto pick with zeros in it even though there may be a valid solution. For example, consider an input string of "76543210": a valid pick would be 7 6 5 4 3 2 10. However, the current implementation produces 7 6 54 3 2 1, and then rejects it because the only digit remaining is a zero and zero is not a valid lotto number. Another example: "12304567" could be interpreted as 1 2 30 4 5 6 7, but this implementation would produce 12 3, skip the zero, then produce 4 5 6 7, and then reject it because there are not enough numbers for a full pick. The solution could conceivably be updated to handle such cases with considerably more time and effort, but it is arguably beyond the scope of expected effort for the problem.
 
