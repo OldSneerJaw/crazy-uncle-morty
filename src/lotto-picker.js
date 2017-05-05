@@ -12,7 +12,6 @@ const maximumTensDigit = '5';
  * @throws An exception under the following conditions:
  *         - The input does not contain at least seven characters
  *         - The input contains any character that is not a digit (0-9)
- *         - The input contains a duplicate lotto number
  *         - The input does not contain enough lotto numbers to make a pick (7)
  *         - The input contains too many numbers to make a pick (7)
  */
@@ -22,7 +21,7 @@ exports.makePick = function(inputString) {
   }
 
   // In JavaScript the Set type is iterated in insertion order so that the order will always be predictable, like in an array; however, it
-  // also automatically removes duplicate values by its very nature.
+  // also provides constant time lookups for the existence of an element, which will come in handy
   let pickNumbers = new Set();
   let stagedChar = '';
 
@@ -74,7 +73,7 @@ exports.makePick = function(inputString) {
       // Skip a zero digit when it would be the first digit of a new two-digit number
       continue;
     } else if (currentChar > maximumTensDigit) {
-      // Because the maximum value is 59, if the first digit is 6, then it cannot be the start of a two digit number. Add it as a one-digit
+      // Because the maximum value is 59, if the first digit is 6, then it cannot be the start of a two-digit number. Add it as a one-digit
       // number to the pick.
       addToPick(currentChar);
     } else if (inputString.length - i === expectedCount - pickNumbers.size) {
